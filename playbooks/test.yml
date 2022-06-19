@@ -1,0 +1,9 @@
+---
+- name: Install Test
+  hosts: all
+  # remote_user: user
+  become: true
+  become_method: sudo
+
+  roles:
+    - docker

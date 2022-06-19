@@ -1,0 +1,31 @@
+- name: Update And Upgrade apt
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: full
+
+- name: Install Docker Dependency
+  ansible.builtin.apt:
+    name:
+      - "ca-certificates"
+      - "curl"
+      - "gnupg"
+      - "lsb-release"
+    state: present
+
+- name: get docker deb repository path
+  shell: echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable\"
+  register: repository_val
+
+- name: Add docker deb repository file
+  ansible.builtin.copy:
+    dest: "/tmp/ansible.test"
+    content: "{{ repository_val.stdout }}"
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name:
+      - "docker-ce"
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    update_cache: yes
