@@ -1,0 +1,23 @@
+- name: Install docker python package
+  pip:
+    name: docker
+
+- name: Pull an image
+  community.docker.docker_image:
+    name: elasticsearch:8.2.3
+    source: pull
+
+- name: Create a network
+  community.docker.docker_network:
+    name: "{{ elastic_network }}"
+
+- name: Create a elasticsearch container
+  community.docker.docker_container:
+    name: elasticsearch
+
+    image: elasticsearch:8.2.3
+    networks:
+      - name: "{{ elastic_network }}"
+    ports:
+      - "9200:9200"
+      - "9300:9300"

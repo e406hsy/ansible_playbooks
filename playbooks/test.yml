@@ -1,9 +1,9 @@
 ---
 - name: Install Test
-  hosts: all
+  hosts: oracle
   # remote_user: user
   become: true
   become_method: sudo
 
   roles:
-    - docker
+    - elasticsearch

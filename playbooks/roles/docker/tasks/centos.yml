@@ -1,0 +1,19 @@
+- name: Install Docker Dependency
+  ansible.builtin.yum:
+    name: "yum-utils"
+    state: present
+
+- name: Add repository
+  yum_repository:
+    name: dockerRepository
+    description: Add Docker repository
+    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Install Docker
+  ansible.builtin.yum:
+    name:
+      - "docker-ce"
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
