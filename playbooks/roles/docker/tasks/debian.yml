@@ -18,7 +18,7 @@
 
 - name: Add docker deb repository file
   ansible.builtin.copy:
-    dest: "/tmp/ansible.test"
+    dest: "/etc/apt/sources.list.d/docker.list"
     content: "{{ repository_val.stdout }}"
 
 - name: Install Docker
