@@ -1,0 +1,41 @@
+- name: Install docker python package
+  pip:
+    name: docker
+
+- name: Pull an image
+  community.docker.docker_image:
+    name: linuxserver/wireguard
+    source: pull
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "/data/wireguard/config"
+    state: directory
+    mode: '0755'
+
+- name: Create a wireguard container
+  community.docker.docker_container:
+    name: wireguard
+    image: linuxserver/wireguard
+    ports:
+      - "51820:51820/udp"
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Europe/London
+      SERVERURL: "152.70.233.148"
+      SERVERPORT: "51820"
+      PEERS: "1"
+      PEERDNS: "auto"
+      INTERNAL_SUBNET: "10.13.13.0"
+      ALLOWEDIPS: 0.0.0.0/0
+      LOG_CONFS: "true"
+    volumes: 
+      - "/data/wireguard/config:/config"
+      - "/lib/modules:/lib/modules"
+    capabilities : 
+      - "NET_ADMIN"
+      - "SYS_MODULE"
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: 1
+    restart_policy: unless-stopped
