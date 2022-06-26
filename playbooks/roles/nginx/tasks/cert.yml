@@ -1,0 +1,88 @@
+- name: Creating a Private Key
+  ansible.builtin.expect:
+    command: "openssl genrsa -des3 -out {{ item.domain }}.temp.key 2048"
+    responses:
+      (?i)phrase: "temp"
+  loop: "{{ servers_to_connect }}"
+
+- name: Remove key password
+  ansible.builtin.expect:
+    command: openssl rsa -in {{ item.domain }}.temp.key -out {{ item.domain }}.key
+    responses:
+      (?i)phrase: "temp"
+  loop: "{{ servers_to_connect }}"
+
+- name: Creating a Certificate Signing Request
+  ansible.builtin.expect:
+    command: openssl req -key {{ item.domain }}.key -new -out {{ item.domain }}.csr
+    responses:
+      (?i)phrase: ""
+      Country Name: KR
+      Province Name: Seoul
+      Locality Name: Seoul
+      Organization Name: e406hsy
+      Organizational Unit Name: personal
+      Common Name: "{{ item.domain }}"
+      Email Address: none@example.com
+      A challenge password: ""
+      An optional company name: ""
+  loop: "{{ servers_to_connect }}"
+
+- name: Creating a Self-Signed Certificate
+  ansible.builtin.expect:
+    command: openssl x509 -signkey {{ item.domain }}.key -in {{ item.domain }}.csr -req -days 365 -out {{ item.domain }}.crt
+    responses:
+      (?i)phrase: "temp"
+  loop: "{{ servers_to_connect }}"
+  
+- name: remove old cert
+  ansible.builtin.file:
+    path: /etc/nginx/{{ item.domain }}.crt
+    state: absent
+  loop: "{{ servers_to_connect }}"
+  
+- name: remove old key
+  ansible.builtin.file:
+    path: /etc/nginx/{{ item.domain }}.key
+    state: absent
+  loop: "{{ servers_to_connect }}"
+
+- name: Copy cert
+  ansible.builtin.copy:
+    src : "{{ item.domain }}.crt"
+    dest: /etc/nginx/{{ item.domain }}.crt
+    mode: '0644'
+    remote_src: yes
+  loop: "{{ servers_to_connect }}"
+
+- name: Copy key
+  ansible.builtin.copy:
+    src : "{{ item.domain }}.key"
+    dest: /etc/nginx/{{ item.domain }}.key
+    mode: '0644'
+    remote_src: yes
+  loop: "{{ servers_to_connect }}"
+  
+- name: remove temp cert
+  ansible.builtin.file:
+    path: "{{ item.domain }}.temp.crt"
+    state: absent
+  loop: "{{ servers_to_connect }}"
+  
+- name: remove temp cert
+  ansible.builtin.file:
+    path: "{{ item.domain }}.crt"
+    state: absent
+  loop: "{{ servers_to_connect }}"
+
+- name: remove temp key
+  ansible.builtin.file:
+    path: "{{ item.domain }}.key"
+    state: absent
+  loop: "{{ servers_to_connect }}"
+
+- name: remove temp csr
+  ansible.builtin.file:
+    path: "{{ item.domain }}.csr"
+    state: absent
+  loop: "{{ servers_to_connect }}"
