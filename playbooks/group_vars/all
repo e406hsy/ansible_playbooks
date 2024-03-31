@@ -1,1 +1,4 @@
 elastic_network: elastic
+
+
+podman_home_directory: ~/podman

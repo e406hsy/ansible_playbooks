@@ -5,6 +5,6 @@
       - 'yml'
 
 
-- name: Install nginx on CentOs or Rethat linux
+- name: Install nginx on CentOs or Redhat linux
   import_tasks: centos.yml
   when: ansible_facts['os_family']|lower == 'redhat'

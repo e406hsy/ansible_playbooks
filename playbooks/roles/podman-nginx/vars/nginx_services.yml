@@ -1,0 +1,7 @@
+
+# example server
+
+servers_to_connect:
+  - name: user tomcat
+    host: http://127.0.0.1:8080
+    domain: mytomcat.e406hsy.com

@@ -1,0 +1,87 @@
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ podman_home_directory }}"
+    - "{{ path.nginx.home }}"
+    - "{{ path.nginx.cert }}"
+
+- name: Creating a Private Key
+  ansible.builtin.expect:
+    command: "openssl genrsa -des3 -out star.{{ global_domain }}.temp.key 2048"
+    responses:
+      (?i)phrase: "temp"
+
+- name: Remove key password
+  ansible.builtin.expect:
+    command: openssl rsa -in star.{{ global_domain }}.temp.key -out star.{{ global_domain }}.key
+    responses:
+      (?i)phrase: "temp"
+
+- name: Creating a Certificate Signing Request
+  ansible.builtin.expect:
+    command: openssl req -key star.{{ global_domain }}.key -new -out star.{{ global_domain }}.csr
+    responses:
+      (?i)phrase: ""
+      Country Name: KR
+      Province Name: Seoul
+      Locality Name: Seoul
+      Organization Name: e406hsy
+      Organizational Unit Name: personal
+      Common Name: "*.{{ global_domain }}"
+      Email Address: none@example.com
+      A challenge password: ""
+      An optional company name: ""
+
+- name: Creating a Self-Signed Certificate
+  ansible.builtin.expect:
+    command: openssl x509 -signkey star.{{ global_domain }}.key -in star.{{ global_domain }}.csr -req -days 365 -out star.{{ global_domain }}.crt
+    responses:
+      (?i)phrase: "temp"
+
+
+- name: remove old cert
+  ansible.builtin.file:
+    path: "{{ path.nginx.cert }}/star.{{ global_domain }}.crt"
+    state: absent
+  
+- name: remove old key
+  ansible.builtin.file:
+    path: "{{ path.nginx.cert }}/star.{{ global_domain }}.key"
+    state: absent
+
+- name: Copy cert
+  ansible.builtin.copy:
+    src : "star.{{ global_domain }}.crt"
+    dest: "{{ path.nginx.cert }}/star.{{ global_domain }}.crt"
+    mode: '0644'
+    remote_src: yes
+
+- name: Copy key
+  ansible.builtin.copy:
+    src : "star.{{ global_domain }}.key"
+    dest: "{{ path.nginx.cert }}/star.{{ global_domain }}.key"
+    mode: '0644'
+    remote_src: yes
+  
+- name: remove temp cert
+  ansible.builtin.file:
+    path: "star.{{ global_domain }}.temp.crt"
+    state: absent
+  
+- name: remove temp cert
+  ansible.builtin.file:
+    path: "star.{{ global_domain }}.crt"
+    state: absent
+
+- name: remove temp key
+  ansible.builtin.file:
+    path: "star.{{ global_domain }}.key"
+    state: absent
+
+- name: remove temp csr
+  ansible.builtin.file:
+    path: "star.{{ global_domain }}.csr"
+    state: absent

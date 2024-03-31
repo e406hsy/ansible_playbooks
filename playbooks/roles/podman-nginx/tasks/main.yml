@@ -1,0 +1,20 @@
+- name: Include all /vars/*.yml files
+  ansible.builtin.include_vars:
+    dir: vars
+    extensions:
+      - 'yml'
+
+
+- name: CentOs or Redhat linux
+  import_tasks: centos.yml
+  when: ansible_facts['os_family']|lower == 'redhat'
+
+- name: create ssl certificate
+  import_tasks: cert.yml
+  when: "'cert' in targets"
+
+
+
+- name: add services
+  import_tasks: service.yml
+  when: "'cert' in targets"

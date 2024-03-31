@@ -1,0 +1,61 @@
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ podman_home_directory }}"
+    - "{{ path.nginx.home }}"
+    - "{{ path.nginx.home }}/logs"
+    - "{{ path.nginx.home }}/html"
+    - "{{ path.nginx.cert }}"
+    - "{{ path.nginx.home }}/conf"
+    - "{{ path.nginx.home }}/conf/vhosts"
+    - "{{ path.nginx.home }}/conf.d"
+    - "{{ path.nginx.home }}/script"
+
+- name: Create a podman network
+  containers.podman.podman_network:
+    name: nginx_network
+    ipv6: false
+
+- name: Copy template file (podman)
+  template:
+    src: "podman-compose.yml"
+    dest: "{{ path.nginx.home }}/podman-compose.yml"
+    mode: 0644
+
+- name: Copy (conf)
+  copy:
+    src: "files/conf"
+    dest: "{{ path.nginx.home }}/"
+    mode: 0644
+    directory_mode: 0755
+
+- name: Copy (conf.d)
+  copy:
+    src: "files/conf.d"
+    dest: "{{ path.nginx.home }}/"
+    mode: 0644
+    directory_mode: 0755
+
+- name: Copy (html)
+  copy:
+    src: "files/html"
+    dest: "{{ path.nginx.home }}/"
+    mode: 0644
+    directory_mode: 0755
+
+- name: Copy (script)
+  copy:
+    src: "files/script"
+    dest: "{{ path.nginx.home }}/"
+    mode: 0755
+    directory_mode: 0755
+
+- name: podman-compose up
+  command: "{{ item }}"
+  with_items:
+    - "podman-compose up -d"
+  args:
+    chdir: "{{ path.nginx.home }}"

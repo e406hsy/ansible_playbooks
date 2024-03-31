@@ -1,0 +1,8 @@
+---
+- name: install wireguard
+  vars_files:
+    - ./group_vars/all
+    - ./group_vars/private
+  hosts: "{{ host_vars }}"
+  roles:
+    - wireguard

@@ -1,0 +1,8 @@
+---
+- name: install podman-nginx
+  vars_files:
+    - ./group_vars/all
+    - ./group_vars/private
+  hosts: "{{ host_vars }}"
+  roles:
+    - podman-nginx

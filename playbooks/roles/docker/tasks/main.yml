@@ -2,6 +2,6 @@
   import_tasks: debian.yml
   when: ansible_facts['os_family']|lower == 'debian'
 
-- name: Install Docker on CentOs or Rethat linux
+- name: Install Docker on CentOs or Redhat linux
   import_tasks: centos.yml
   when: ansible_facts['os_family']|lower == 'redhat'

@@ -3,9 +3,8 @@
     name: docker
 
 - name: Pull an image
-  community.docker.docker_image:
+  containers.podman.podman_image:
     name: linuxserver/wireguard
-    source: pull
 
 - name: Create a directory if it does not exist
   ansible.builtin.file:
@@ -14,28 +13,29 @@
     mode: '0755'
 
 - name: Create a wireguard container
-  community.docker.docker_container:
+  containers.podman.podman_container:
     name: wireguard
     image: linuxserver/wireguard
     ports:
       - "51820:51820/udp"
     env:
-      PUID: "1000"
-      PGID: "1000"
+      PUID: "ansible_facts['user_uid']"
+      PGID: "ansible_facts['user_gid']"
       TZ: Europe/London
-      SERVERURL: "152.70.233.148"
+      SERVERURL: "{{ ansible_host }}"
       SERVERPORT: "51820"
       PEERS: "1"
       PEERDNS: "auto"
       INTERNAL_SUBNET: "10.13.13.0"
       ALLOWEDIPS: 0.0.0.0/0
       LOG_CONFS: "true"
-    volumes: 
+    volume:
       - "/data/wireguard/config:/config"
       - "/lib/modules:/lib/modules"
     capabilities : 
       - "NET_ADMIN"
       - "SYS_MODULE"
-    sysctls:
+    sysctl:
       net.ipv4.conf.all.src_valid_mark: 1
+      net.ipv4.ip_forward: 1
     restart_policy: unless-stopped

@@ -1,5 +1,7 @@
 hosts
 
+playbooks/group_vars/private*
+
 test*.json
 
 playbooks/roles/*/vars/personal*.yml
