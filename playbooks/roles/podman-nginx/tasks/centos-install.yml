@@ -53,6 +53,10 @@
     mode: 0755
     directory_mode: 0755
 
+- name: enable 443 port access for rootless podman container
+  command: 'sysctl net.ipv4.ip_unprivileged_port_start=443'
+  become: true
+
 - name: podman-compose up
   command: "{{ item }}"
   with_items:

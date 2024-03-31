@@ -12,6 +12,10 @@
     state: directory
     mode: '0755'
 
+- name: enable wireguard module
+  command: 'modprobe wireguard'
+  become: true
+
 - name: Create a wireguard container
   containers.podman.podman_container:
     name: wireguard
