@@ -1,4 +1,4 @@
-- name: Create a directory if it does not exist
+- name: Create base directories if it does not exist
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -8,6 +8,12 @@
     - "{{ path.nginx.home }}/conf"
     - "{{ path.nginx.home }}/conf/vhosts"
 
+- name: Create log directories if it does not exist
+  ansible.builtin.file:
+    path: "{{ path.nginx.home }}/logs/{{ item.name }}"
+    state: directory
+  loop: "{{ servers_to_connect }}"
+
 - name: Copy Nginx Host Configuration file
   template:
     src: "vhosts.conf.j2"
@@ -16,6 +22,4 @@
   loop: "{{ servers_to_connect }}"
 
 - name: nginx live reload
-  command: "{{ item }}"
-  with_items:
-    - "podman kill --signal HUP nginx"
+  command: "podman kill --signal HUP nginx"

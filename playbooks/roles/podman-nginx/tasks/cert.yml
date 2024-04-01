@@ -66,17 +66,12 @@
     mode: '0644'
     remote_src: yes
   
-- name: remove temp cert
+- name: remove temp files
   ansible.builtin.file:
-    path: "star.{{ global_domain }}.temp.crt"
+    path: "{{ item }}"
     state: absent
-
-- name: remove temp key
-  ansible.builtin.file:
-    path: "star.{{ global_domain }}.temp.key"
-    state: absent
-
-- name: remove temp csr
-  ansible.builtin.file:
-    path: "star.{{ global_domain }}.csr"
-    state: absent
+  with_items:
+    - "star.{{ global_domain }}.temp.key"
+    - "star.{{ global_domain }}.crt"
+    - "star.{{ global_domain }}.csr"
+    - "star.{{ global_domain }}.key"
