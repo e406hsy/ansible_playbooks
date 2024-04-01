@@ -21,7 +21,7 @@
 
 - name: Copy template file (podman)
   template:
-    src: "podman-compose.yml"
+    src: "podman-compose.yml.j2"
     dest: "{{ path.nginx.home }}/podman-compose.yml"
     mode: 0644
 

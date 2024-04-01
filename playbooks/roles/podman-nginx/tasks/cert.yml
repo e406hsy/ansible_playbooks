@@ -70,15 +70,10 @@
   ansible.builtin.file:
     path: "star.{{ global_domain }}.temp.crt"
     state: absent
-  
-- name: remove temp cert
-  ansible.builtin.file:
-    path: "star.{{ global_domain }}.crt"
-    state: absent
 
 - name: remove temp key
   ansible.builtin.file:
-    path: "star.{{ global_domain }}.key"
+    path: "star.{{ global_domain }}.temp.key"
     state: absent
 
 - name: remove temp csr

@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: jenkins
+    restart: unless-stopped
+    {% if jenkins_http_port is defined and jenkins_inbound_tcp_port is defined %}
+    ports:
+      {% if jenkins_http_port is defined %}
+      - {{ jenkins_http_port }}:8080
+      {% endif %}
+      {% if jenkins_inbound_tcp_port is defined %}
+      - {{ jenkins_inbound_tcp_port }}:50000
+      {% endif %}
+    {% endif %}
+
+networks:
+  nginx_network:
+    external: true
+    name: nginx_network
+  default:
+    name: jenkins_default

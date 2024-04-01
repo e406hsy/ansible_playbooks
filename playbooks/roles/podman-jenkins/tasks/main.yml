@@ -1,0 +1,9 @@
+- name: Include all /vars/*.yml files
+  ansible.builtin.include_vars:
+    dir: vars
+    extensions:
+      - 'yml'
+
+
+- name: Install
+  import_tasks: install.yml

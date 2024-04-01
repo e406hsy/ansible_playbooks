@@ -1,0 +1,3 @@
+path:
+  jenkins:
+    home: "{{ podman_home_directory }}/jenkins"

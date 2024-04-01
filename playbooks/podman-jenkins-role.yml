@@ -1,8 +1,8 @@
 ---
-- name: jobs about podman-nginx
+- name: install podman-jenkins
   vars_files:
     - ./group_vars/all
     - ./group_vars/private
   hosts: "{{ host_vars }}"
   roles:
-    - podman-nginx
+    - podman-jenkins

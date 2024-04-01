@@ -1,0 +1,22 @@
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ podman_home_directory }}"
+    - "{{ path.jenkins.home }}"
+
+
+- name: Copy template file (podman)
+  template:
+    src: "podman-compose.yml.j2"
+    dest: "{{ path.jenkins.home }}/podman-compose.yml"
+    mode: 0644
+
+- name: podman-compose up
+  command: "{{ item }}"
+  with_items:
+    - "podman-compose up -d"
+  args:
+    chdir: "{{ path.jenkins.home }}"
