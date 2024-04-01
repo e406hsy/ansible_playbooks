@@ -25,6 +25,12 @@ ansible_user=myUserName
 `ansible-playbook ./playbooks/podman-nginx-role.yml -e host_vars=myserver1 -e targets=cert -e global_domain=example.com -i hosts`
 * global_domain : 서브 도메인을 연결하는 루트 도메인
 
+#### nginx add sub domain
+
+`ansible-playbook ./playbooks/podman-nginx-role.yml -e host_vars=myserver1 -e targets=service -e global_domain=example.com -i hosts`
+* global_domain : 서브 도메인을 연결하는 루트 도메인
+* 위 명령어 실행전에 playbooks/roles/podman-nginx/vars/nginx_services.yml에 필요한 내용 추가 필요
+
 #### jenkins install
 `ansible-playbook ./playbooks/podman-jenkins-role.yml -e host_vars=myserver1 -e targets=install -e jenkins_http_port=8080 -e jenkins_inbound_tcp_port=50000 -i hosts`
 * jenkins_inbound_tcp_port : 외부에서 접근 가능한 jenkins tcp inbound port. optional

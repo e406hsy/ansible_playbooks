@@ -1,8 +1,7 @@
 
 {% for server in servers_to_connect %}
     server {
-        listen       {{ domain.port }} ssl;
-        listen  [::]:{{ domain.port }};
+        listen       443 ssl;
         keepalive_timeout   70;
 
         server_name         {{ server.domain }};

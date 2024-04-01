@@ -17,4 +17,4 @@
 
 - name: add services
   import_tasks: service.yml
-  when: "'cert' in targets"
+  when: "'service' in targets"

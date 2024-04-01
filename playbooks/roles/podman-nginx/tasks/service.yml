@@ -8,5 +8,14 @@
     - "{{ path.nginx.home }}/conf"
     - "{{ path.nginx.home }}/conf/vhosts"
 
+- name: Copy Nginx Host Configuration file
+  template:
+    src: "vhosts.conf.j2"
+    dest: "{{ path.nginx.home }}/conf/vhosts/{{ item.name }}.conf"
+    mode: 0644
+  loop: "{{ servers_to_connect }}"
 
-# todo
+- name: nginx live reload
+  command: "{{ item }}"
+  with_items:
+    - "podman kill --signal HUP nginx"

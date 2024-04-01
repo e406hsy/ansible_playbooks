@@ -2,6 +2,6 @@
 # example server
 
 servers_to_connect:
-  - name: user tomcat
-    host: http://127.0.0.1:8080
-    domain: mytomcat.e406hsy.com
+  - name: user_tomcat # name of servicer. blank is forbidden
+    host: http://127.0.0.1:8080 # service url
+    domain: mytomcat.e406hsy.com # service host
