@@ -14,6 +14,9 @@ services:
       - {{ jenkins_inbound_tcp_port }}:50000
       {% endif %}
     {% endif %}
+    networks:
+      - default
+      - nginx_network
 
 networks:
   nginx_network:
