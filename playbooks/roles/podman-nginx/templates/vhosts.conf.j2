@@ -11,6 +11,9 @@
         ssl_ciphers         HIGH:!aNULL:!MD5;
         ssl_session_cache   shared:SSL:10m;
         ssl_session_timeout 10m;
+
+        access_log  /var/log/nginx/{{ server.name }}/access.log  main;
+        error_log  /var/log/nginx/{{ server.name }}/error.log  debug;
         
         location / {
             proxy_pass              {{ server.host }}/;
