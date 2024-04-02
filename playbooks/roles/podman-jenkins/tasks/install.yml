@@ -6,6 +6,7 @@
   with_items:
     - "{{ podman_home_directory }}"
     - "{{ path.jenkins.home }}"
+    - "{{ path.jenkins.home }}/data"
 
 
 - name: Copy template file (podman)
