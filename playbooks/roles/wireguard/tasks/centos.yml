@@ -16,6 +16,10 @@
   command: 'modprobe wireguard'
   become: true
 
+- name: enable iptables module
+  command: 'modprobe ip_tables'
+  become: true
+
 - name: Create a wireguard container
   containers.podman.podman_container:
     name: wireguard
