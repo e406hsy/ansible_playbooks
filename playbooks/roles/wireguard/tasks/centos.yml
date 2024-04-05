@@ -35,8 +35,8 @@
     ports:
       - "51820:51820/udp"
     env:
-      PUID: "ansible_facts['user_uid']"
-      PGID: "ansible_facts['user_gid']"
+      PUID: "{{ ansible_facts['user_uid'] }}"
+      PGID: "{{ ansible_facts['user_gid'] }}"
       TZ: Europe/London
       SERVERURL: "{{ ansible_host }}"
       SERVERPORT: "51820"
