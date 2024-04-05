@@ -16,8 +16,16 @@
   command: 'modprobe wireguard'
   become: true
 
+- name: enable wireguard module permanent
+  command: 'echo wireguard > /etc/modules-load.d/wireguard.conf'
+  become: true
+
 - name: enable iptables module
   command: 'modprobe ip_tables'
+  become: true
+
+- name: enable iptables module permanent
+  command: 'echo ip_tables > /etc/modules-load.d/ip_tables.conf'
   become: true
 
 - name: Create a wireguard container
