@@ -18,11 +18,11 @@ ansible_user=myUserName
 
 ### run playbook
 #### nginx create self signed certificate
-`ansible-playbook ./playbooks/podman-nginx-role.yml -e host_vars=myserver1 -e targets=install -e global_domain=example.com -i hosts`
+`ansible-playbook ./playbooks/podman-nginx-role.yml -e host_vars=myserver1 -e targets=cert -e global_domain=example.com -i hosts`
 * global_domain : nginx ssl 인증서를 생성하는 루트 도메인 
 
 #### nginx install
-`ansible-playbook ./playbooks/podman-nginx-role.yml -e host_vars=myserver1 -e targets=cert -e global_domain=example.com -i hosts`
+`ansible-playbook ./playbooks/podman-nginx-role.yml -e host_vars=myserver1 -e targets=install -e global_domain=example.com -i hosts`
 * global_domain : 서브 도메인을 연결하는 루트 도메인
 
 #### nginx add sub domain
